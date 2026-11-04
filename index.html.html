@@ -1,697 +1,261 @@
 from pathlib import Path
 
-html = r'''<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="KIBERone Semey — международная IT-школа для детей. Программирование, создание игр, искусственный интеллект и цифровое творчество. Запишитесь на бесплатный пробный урок!">
-  <meta name="theme-color" content="#f5f8f0">
-  <meta property="og:title" content="KIBERone Semey — Будущее начинается с кода">
-  <meta property="og:description" content="Помогаем детям создавать игры, изучать программирование и открывать мир технологий.">
-  <title>KIBERone Semey — Будущее начинается с кода</title>
-  <style>
-    :root {
-      --bg: #080d25;
-      --bg2: #0d1536;
-      --panel: rgba(19, 29, 67, .78);
-      --line: rgba(158, 177, 255, .17);
-      --text: #f7f8ff;
-      --muted: #b8c2e8;
-      --blue: #6c7dff;
-      --cyan: #42e8e0;
-      --lime: #c7ff5e;
-      --purple: #a66bff;
-      --radius: 24px;
-      --shadow: 0 22px 70px rgba(0,0,0,.28);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
-    body {
-      margin: 0; color: var(--text); background:
-        radial-gradient(circle at 85% 5%, rgba(105, 77, 255, .19), transparent 28rem),
-        radial-gradient(circle at 5% 38%, rgba(30, 208, 222, .09), transparent 26rem),
-        var(--bg);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.6; overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    button, input, select { font: inherit; }
-    img { display: block; width: 100%; }
-    .container { width: min(1160px, calc(100% - 40px)); margin-inline: auto; }
-    .section { padding: 96px 0; position: relative; }
-    .eyebrow { color: var(--cyan); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { font-size: clamp(2.7rem, 6vw, 5.5rem); line-height: .99; letter-spacing: -.055em; margin: 18px 0 24px; max-width: 760px; }
-    h2 { font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.08; letter-spacing: -.04em; margin: 12px 0 18px; }
-    h3 { line-height: 1.2; }
-    .gradient-text { background: linear-gradient(95deg, #fff 5%, #a9b4ff 46%, var(--cyan) 100%); color: transparent; background-clip: text; -webkit-background-clip: text; }
-    .section-intro { color: var(--muted); max-width: 680px; font-size: 1.05rem; }
-    .section-head { margin-bottom: 36px; }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      min-height: 50px; padding: 13px 21px; border: 1px solid transparent; border-radius: 14px;
-      font-weight: 800; cursor: pointer; transition: transform .2s, box-shadow .2s, background .2s;
-      text-align: center;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-primary { color: #071127; background: linear-gradient(110deg, var(--lime), #83f5d1); box-shadow: 0 9px 28px rgba(139,255,194,.16); }
-    .btn-primary:hover { box-shadow: 0 12px 35px rgba(139,255,194,.27); }
-    .btn-secondary { background: rgba(255,255,255,.055); border-color: var(--line); color: var(--text); }
-    .btn-secondary:hover { background: rgba(255,255,255,.1); }
-    .site-header { position: sticky; top: 0; z-index: 50; background: rgba(8,13,37,.78); backdrop-filter: blur(18px); border-bottom: 1px solid rgba(255,255,255,.07); }
-    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 950; letter-spacing: -.04em; font-size: 1.23rem; white-space: nowrap; }
-    .brand-mark { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 13px; color: #071127; background: linear-gradient(135deg, var(--cyan), var(--lime)); font-size: 1.05rem; box-shadow: 0 0 28px rgba(66,232,224,.18); }
-    .brand small { display: block; color: var(--muted); font-size: .66rem; letter-spacing: .16em; font-weight: 700; margin-top: -3px; }
-    .nav-links { display: flex; align-items: center; gap: 22px; color: #d4dcff; font-size: .88rem; }
-    .nav-links a:hover { color: var(--cyan); }
-    .nav .btn { min-height: 43px; padding: 10px 15px; font-size: .86rem; }
-    .menu-toggle { display: none; border: 1px solid var(--line); color: white; background: var(--panel); border-radius: 12px; width: 44px; height: 44px; font-size: 1.3rem; }
-    .hero { min-height: 690px; display: flex; align-items: center; padding: 78px 0 84px; position: relative; isolation: isolate; }
-    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 42px; align-items: center; }
-    .hero-copy { position: relative; z-index: 2; }
-    .hero-copy .lead { max-width: 620px; color: var(--muted); font-size: clamp(1.05rem, 1.7vw, 1.2rem); margin-bottom: 28px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-    .hero-points { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 28px; color: #d7e0ff; font-size: .88rem; }
-    .hero-points span::before { content: "✦"; color: var(--lime); margin-right: 8px; }
-    .hero-visual { position: relative; min-height: 470px; }
-    .hero-photo { position: absolute; inset: 16px 0 16px 25px; width: calc(100% - 25px); height: calc(100% - 32px); object-fit: cover; border-radius: 34px; border: 1px solid rgba(255,255,255,.18); box-shadow: var(--shadow); }
-    .photo-overlay { position: absolute; inset: 16px 0 16px 25px; border-radius: 34px; background: linear-gradient(180deg, rgba(8,13,37,.03) 35%, rgba(8,13,37,.78)); }
-    .floating-card { position: absolute; padding: 15px 17px; border: 1px solid rgba(255,255,255,.19); border-radius: 18px; background: rgba(12,20,52,.84); backdrop-filter: blur(16px); box-shadow: var(--shadow); }
-    .floating-card strong { display: block; font-size: 1rem; }
-    .floating-card small { color: var(--muted); }
-    .float-top { top: 0; left: 0; }
-    .float-bottom { right: -12px; bottom: 0; }
-    .float-icon { display: inline-grid; place-items: center; width: 33px; height: 33px; border-radius: 10px; background: rgba(66,232,224,.13); margin-right: 7px; }
-    .orb { position: absolute; border-radius: 50%; filter: blur(1px); pointer-events: none; z-index: -1; }
-    .orb.one { width: 240px; height: 240px; right: -90px; top: 60px; background: rgba(111,85,255,.12); }
-    .orb.two { width: 160px; height: 160px; left: -80px; bottom: 30px; background: rgba(66,232,224,.08); }
-    .trust-strip { border-block: 1px solid var(--line); background: rgba(255,255,255,.025); }
-    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-    .trust-item { padding: 23px 18px; display: flex; align-items: center; justify-content: center; gap: 11px; color: #e2e8ff; font-weight: 700; font-size: .91rem; border-right: 1px solid var(--line); }
-    .trust-item:last-child { border-right: 0; }
-    .trust-item span { font-size: 1.35rem; }
-    .about-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 58px; align-items: center; }
-    .about-image-wrap { position: relative; }
-    .about-image { height: 430px; object-fit: cover; border-radius: 28px; border: 1px solid var(--line); }
-    .image-note { position: absolute; right: -15px; bottom: 22px; max-width: 210px; background: var(--lime); color: #10172b; padding: 17px 20px; border-radius: 18px; font-weight: 850; box-shadow: var(--shadow); }
-    .about-copy p { color: var(--muted); }
-    .check-list { list-style: none; padding: 0; margin: 25px 0 0; display: grid; gap: 13px; }
-    .check-list li { display: flex; gap: 11px; align-items: flex-start; color: #e5eaff; }
-    .check-list li::before { content: "✓"; flex: 0 0 24px; height: 24px; display: grid; place-items: center; color: var(--cyan); background: rgba(66,232,224,.12); border-radius: 8px; font-weight: 900; }
-    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .glass-card { background: linear-gradient(145deg, rgba(23,34,77,.84), rgba(13,20,50,.83)); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: transform .25s, border-color .25s; }
-    .glass-card:hover { transform: translateY(-5px); border-color: rgba(66,232,224,.45); }
-    .course-image { height: 190px; object-fit: cover; }
-    .course-body { padding: 23px; }
-    .course-icon { width: 43px; height: 43px; display: grid; place-items: center; border-radius: 13px; background: rgba(108,125,255,.17); font-size: 1.35rem; margin-bottom: 15px; }
-    .course-body h3 { margin-bottom: 9px; }
-    .course-body p { color: var(--muted); font-size: .94rem; margin-bottom: 0; }
-    .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .benefit { padding: 25px; border-radius: 21px; background: rgba(255,255,255,.035); border: 1px solid var(--line); }
-    .benefit .symbol { font-size: 1.7rem; margin-bottom: 12px; }
-    .benefit h3 { margin-bottom: 8px; }
-    .benefit p { color: var(--muted); font-size: .94rem; margin-bottom: 0; }
-    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: step; }
-    .step { padding: 25px 21px; background: rgba(255,255,255,.035); border: 1px solid var(--line); border-radius: 20px; }
-    .step-number { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: linear-gradient(135deg, var(--blue), var(--purple)); font-weight: 900; margin-bottom: 20px; }
-    .step p { color: var(--muted); font-size: .92rem; margin-bottom: 0; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; max-width: 880px; }
-    .price-card { padding: 30px; border-radius: 26px; border: 1px solid var(--line); background: var(--panel); }
-    .price-card.featured { border-color: rgba(199,255,94,.55); background: linear-gradient(150deg, rgba(60,83,70,.28), rgba(17,26,62,.9)); }
-    .price-tag { display: inline-block; color: var(--lime); background: rgba(199,255,94,.1); padding: 6px 10px; border-radius: 9px; font-size: .78rem; font-weight: 850; margin-bottom: 18px; }
-    .price { font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 950; letter-spacing: -.05em; margin: 7px 0 4px; }
-    .price small { font-size: .9rem; font-weight: 600; color: var(--muted); letter-spacing: 0; }
-    .price-desc { color: var(--muted); }
-    .price-card .check-list { margin: 24px 0; }
-    .price-card .btn { width: 100%; }
-    .fine-print { color: #9eacd7; font-size: .82rem; margin-top: 18px; max-width: 850px; }
-    .locations-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .location-card { padding: 25px; }
-    .location-top { height: 145px; display: grid; place-items: center; background: radial-gradient(circle, rgba(108,125,255,.25), rgba(14,23,57,.1) 68%); border-radius: 17px; font-size: 3.5rem; margin-bottom: 21px; }
-    .location-card p { color: var(--muted); min-height: 48px; }
-    .location-card .btn { width: 100%; margin-top: 7px; }
-    .gallery-grid { display: grid; grid-template-columns: 1.2fr .8fr .8fr; grid-template-rows: 210px 210px; gap: 14px; }
-    .gallery-grid img { height: 100%; object-fit: cover; border-radius: 19px; border: 1px solid var(--line); }
-    .gallery-grid img:first-child { grid-row: span 2; }
-    .gallery-grid img:last-child { grid-column: span 2; }
-    .faq-list { max-width: 850px; display: grid; gap: 12px; }
-    .faq-item { border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.035); overflow: hidden; }
-    .faq-question { display: flex; justify-content: space-between; align-items: center; gap: 18px; width: 100%; padding: 19px 22px; border: 0; background: transparent; color: var(--text); text-align: left; font-weight: 800; cursor: pointer; }
-    .faq-question span:last-child { color: var(--cyan); font-size: 1.35rem; transition: transform .2s; }
-    .faq-answer { display: none; padding: 0 22px 20px; color: var(--muted); }
-    .faq-item.open .faq-answer { display: block; }
-    .faq-item.open .faq-question span:last-child { transform: rotate(45deg); }
-    .cta-panel { position: relative; padding: clamp(30px, 6vw, 65px); border-radius: 32px; overflow: hidden; border: 1px solid rgba(166,107,255,.35); background: radial-gradient(circle at 90% 20%, rgba(66,232,224,.17), transparent 24rem), linear-gradient(125deg, #18275a, #17143f 65%, #24194f); }
-    .cta-panel p { max-width: 670px; color: #d0d9ff; }
-    .cta-panel .btn { margin-top: 9px; }
-    .contact-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 30px; align-items: start; }
-    .contact-info, .lead-form { border: 1px solid var(--line); background: rgba(255,255,255,.035); border-radius: 24px; padding: 28px; }
-    .contact-line { display: flex; gap: 14px; margin: 20px 0; }
-    .contact-line .symbol { width: 42px; height: 42px; display: grid; place-items: center; flex: 0 0 42px; background: rgba(108,125,255,.15); border-radius: 13px; }
-    .contact-line small { color: var(--muted); display: block; }
-    .contact-line strong { overflow-wrap: anywhere; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .field { display: grid; gap: 7px; }
-    .field.full { grid-column: 1 / -1; }
-    .field label { color: #e0e6ff; font-size: .88rem; font-weight: 700; }
-    .field input, .field select { width: 100%; min-height: 48px; border: 1px solid rgba(179,194,255,.2); border-radius: 12px; background: rgba(5,10,29,.55); color: white; padding: 11px 13px; outline: none; }
-    .field input:focus, .field select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(66,232,224,.1); }
-    .field select option { background: #101936; }
-    .form-note { color: #aab6de; font-size: .8rem; margin: 13px 0 17px; }
-    .lead-form .btn { width: 100%; }
-    .form-status { color: var(--lime); margin: 12px 0 0; font-size: .9rem; }
-    footer { padding: 28px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .86rem; }
-    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .footer-links { display: flex; flex-wrap: wrap; gap: 17px; }
-    .footer-links a:hover { color: var(--cyan); }
-    .back-top { position: fixed; right: 20px; bottom: 20px; width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 14px; color: white; background: rgba(17,26,62,.9); backdrop-filter: blur(10px); cursor: pointer; z-index: 20; display: none; }
-    .back-top.visible { display: block; }
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    @media (max-width: 980px) {
-      .nav-links { gap: 13px; font-size: .8rem; }
-      .nav .btn { display: none; }
-      .hero-grid { grid-template-columns: 1fr  .85fr; gap: 24px; }
-      .hero-visual { min-height: 390px; }
-      .cards-grid, .locations-grid { grid-template-columns: repeat(2, 1fr); }
-      .steps { grid-template-columns: repeat(2, 1fr); }
-      .trust-item { padding-inline: 10px; font-size: .82rem; }
-    }
-    @media (max-width: 720px) {
-      .container { width: min(100% - 30px, 560px); }
-      .section { padding: 68px 0; }
-      .nav { min-height: 68px; }
-      .menu-toggle { display: block; }
-      .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; padding: 18px 22px 22px; background: rgba(8,13,37,.98); border-bottom: 1px solid var(--line); flex-direction: column; align-items: stretch; gap: 0; }
-      .nav-links.open { display: flex; }
-      .nav-links a { padding: 11px 4px; font-size: .95rem; }
-      .hero { min-height: auto; padding: 56px 0 54px; }
-      .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
-      .hero-grid { gap: 35px; }
-      .hero-visual { min-height: 360px; margin: 0 7px; }
-      .hero-photo, .photo-overlay { inset: 12px 0; width: 100%; height: calc(100% - 24px); }
-      .float-bottom { right: -5px; }
-      .hero-points { gap: 9px 15px; }
-      .trust-grid { grid-template-columns: 1fr 1fr; }
-      .trust-item { justify-content: flex-start; border-bottom: 1px solid var(--line); min-height: 65px; }
-      .trust-item:nth-child(2) { border-right: 0; }
-      .trust-item:nth-child(3), .trust-item:nth-child(4) { border-bottom: 0; }
-      .about-grid { gap: 30px; }
-      .about-image { height: 330px; }
-      .image-note { right: -4px; }
-      .cards-grid, .benefit-grid, .locations-grid, .pricing-grid { grid-template-columns: 1fr; }
-      .course-image { height: 210px; }
-      .steps { grid-template-columns: 1fr 1fr; }
-      .step { padding: 19px 16px; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 150px 150px; }
-      .gallery-grid img:first-child { grid-row: span 2; }
-      .gallery-grid img:last-child { grid-column: span 2; }
-      .form-grid { grid-template-columns: 1fr; }
-      .field.full { grid-column: auto; }
-      .footer-inner { align-items: flex-start; flex-direction: column; }
-    }
-    @media (max-width: 420px) {
-      .brand { font-size: 1.08rem; }
-      .brand-mark { width: 35px; height: 35px; }
-      .hero-actions .btn { width: 100%; }
-      .hero-visual { min-height: 300px; }
-      .floating-card { padding: 11px 12px; }
-      .float-bottom { right: -4px; }
-      .steps { grid-template-columns: 1fr; }
-      .gallery-grid { grid-template-rows: 160px 130px 130px; gap: 9px; }
-      .price-card, .contact-info, .lead-form { padding: 22px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
+source = Path("/mnt/data/KIBERone_Semey_green (1)(3).html")
+if not source.exists():
+    raise FileNotFoundError("Не найден исходный HTML. Прикрепите файл kiberone.html ещё раз.")
 
-    /* Тёплая зелёная тема: спокойный, уютный и современный дизайн */
+html = source.read_text(encoding="utf-8")
+
+# Синяя цветовая тема — меняем только палитру, сохраняя структуру и содержимое.
+css_start = html.find("    /* Тёплая зелёная тема:")
+css_end = html.find("\n  </style>", css_start)
+if css_start == -1 or css_end == -1:
+    raise ValueError("Не удалось найти блок цветовой темы в исходном HTML.")
+
+blue_css = r'''    /* Яркая синяя тема KIBERone */
     :root {
-      --bg: #f5f8f0;
-      --bg2: #eaf1e4;
-      --panel: rgba(255,255,255,.92);
-      --line: rgba(49, 91, 61, .15);
-      --text: #203b2b;
-      --muted: #627665;
-      --blue: #477b55;
-      --cyan: #4e9665;
-      --lime: #d9edb9;
-      --purple: #9bbd8a;
-      --shadow: 0 22px 60px rgba(36, 73, 43, .12);
+      --bg:#f2f7ff; --bg2:#e4efff; --panel:rgba(255,255,255,.94);
+      --line:rgba(25,91,190,.16); --text:#102b55; --muted:#58708f;
+      --blue:#1265e8; --cyan:#18b9f5; --lime:#d8edff; --purple:#7a8cff;
+      --shadow:0 22px 60px rgba(18,82,170,.13);
     }
     body {
-      color: var(--text);
-      background:
-        radial-gradient(circle at 88% 4%, rgba(180, 211, 151, .30), transparent 28rem),
-        radial-gradient(circle at 4% 36%, rgba(204, 226, 186, .34), transparent 26rem),
-        var(--bg);
+      color:var(--text);
+      background:radial-gradient(circle at 88% 4%,rgba(90,166,255,.28),transparent 28rem),
+      radial-gradient(circle at 4% 36%,rgba(164,213,255,.34),transparent 26rem),var(--bg);
     }
-    .eyebrow { color: #4c8158; }
-    .gradient-text {
-      background: linear-gradient(95deg, #315d3e 5%, #54875c 52%, #87a96b 100%);
-      color: transparent; background-clip: text; -webkit-background-clip: text;
-    }
-    .btn-primary {
-      color: #fff;
-      background: linear-gradient(110deg, #477b55, #679765);
-      box-shadow: 0 9px 24px rgba(67, 119, 77, .18);
-    }
-    .btn-primary:hover { box-shadow: 0 12px 30px rgba(67, 119, 77, .25); }
-    .btn-secondary { background: rgba(255,255,255,.78); border-color: var(--line); color: #31533b; }
-    .btn-secondary:hover { background: #eaf2e4; }
-    .site-header { background: rgba(248,250,244,.88); border-bottom-color: rgba(49,91,61,.12); }
-    .brand-mark { color: #fff; background: linear-gradient(135deg, #4f875b, #a7c58a); box-shadow: 0 0 24px rgba(76,129,88,.15); }
-    .brand small { color: #6b806d; }
-    .nav-links { color: #3e5e46; }
-    .nav-links a:hover { color: #4c8158; }
-    .menu-toggle { border-color: var(--line); color: #31533b; background: #fff; }
-    .hero-points { color: #46634b; }
-    .hero-points span::before { color: #6e9b62; }
-    .hero-photo { border-color: rgba(255,255,255,.75); }
-    .photo-overlay { background: linear-gradient(180deg, rgba(21,52,31,.02) 30%, rgba(21,52,31,.67)); }
-    .floating-card { border-color: rgba(255,255,255,.7); background: rgba(250,252,247,.94); color: #24452e; }
-    .floating-card small { color: #627665; }
-    .float-icon { background: #e5efdc; }
-    .orb.one { background: rgba(123,164,101,.15); }
-    .orb.two { background: rgba(105,154,91,.12); }
-    .trust-strip { border-color: var(--line); background: rgba(232,241,225,.65); }
-    .trust-item { color: #3c5c43; border-color: var(--line); }
-    .about-image { border-color: var(--line); }
-    .image-note { background: #dcebc8; color: #294a31; }
-    .about-copy p, .section-intro { color: var(--muted); }
-    .check-list li { color: #385440; }
-    .check-list li::before { color: #477b55; background: #e5efdc; }
-    .glass-card { background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(239,246,233,.94)); border-color: var(--line); box-shadow: 0 10px 32px rgba(36,73,43,.045); }
-    .glass-card:hover { border-color: rgba(76,129,88,.5); }
-    .course-icon { background: #e5efdc; }
-    .course-body p, .benefit p, .step p, .price-desc { color: var(--muted); }
-    .benefit, .step, .faq-item { background: rgba(255,255,255,.68); border-color: var(--line); }
-    .step-number { background: linear-gradient(135deg, #477b55, #8eb579); color: white; }
-    .price-card { background: rgba(255,255,255,.82); border-color: var(--line); }
-    .price-card.featured { border-color: rgba(91,140,77,.42); background: linear-gradient(150deg, rgba(222,237,207,.9), rgba(255,255,255,.95)); }
-    .price-tag { color: #477b55; background: #e7f0df; }
-    .price small { color: var(--muted); }
-    .fine-print { color: #708574; }
-    .location-top { background: radial-gradient(circle, rgba(162,194,139,.36), rgba(232,241,225,.25) 68%); }
-    .faq-question { color: var(--text); }
-    .faq-question span:last-child { color: #4c8158; }
-    .faq-answer { color: var(--muted); }
-    .cta-panel {
-      border-color: rgba(94,137,77,.24);
-      background: radial-gradient(circle at 90% 20%, rgba(194,220,169,.55), transparent 24rem), linear-gradient(125deg, #e2edda, #f7f9f2 70%, #eaf2e3);
-    }
-    .cta-panel p { color: #526b55; }
-    .contact-info, .lead-form { border-color: var(--line); background: rgba(255,255,255,.78); }
-    .contact-line .symbol { background: #e6efdf; }
-    .contact-line small { color: var(--muted); }
-    .field label { color: #385440; }
-    .field input, .field select { border-color: rgba(73,113,77,.22); background: #fbfcf8; color: #203b2b; }
-    .field input:focus, .field select:focus { border-color: #679765; box-shadow: 0 0 0 3px rgba(103,151,101,.12); }
-    .field select option { background: #fff; color: #203b2b; }
-    .form-note { color: #708574; }
-    .form-status { color: #477b55; }
-    footer { border-top-color: var(--line); color: #627665; }
-    .footer-links a:hover { color: #477b55; }
-    .back-top { border-color: var(--line); color: #31533b; background: rgba(255,255,255,.94); }
-    @media (max-width: 720px) {
-      .nav-links { background: rgba(248,250,244,.99); border-bottom-color: var(--line); }
-    }
+    .eyebrow{color:#1265c9}
+    .gradient-text{background:linear-gradient(95deg,#0754c5 5%,#1688ef 52%,#27c3ed 100%);color:transparent;background-clip:text;-webkit-background-clip:text}
+    .btn-primary{color:#fff;background:linear-gradient(110deg,#075fe0,#16a8f0);box-shadow:0 9px 24px rgba(16,111,225,.22)}
+    .btn-primary:hover{box-shadow:0 12px 30px rgba(16,111,225,.3)}
+    .btn-secondary{background:rgba(255,255,255,.84);border-color:var(--line);color:#174c91}
+    .btn-secondary:hover{background:#e6f2ff}
+    .site-header{background:rgba(246,250,255,.9);border-bottom-color:rgba(25,91,190,.12)}
+    .brand-mark{color:#fff;background:linear-gradient(135deg,#075fe0,#20bdf1);box-shadow:0 0 24px rgba(22,137,230,.2)}
+    .brand small{color:#6480a5}
+    .nav-links{color:#244d7c}
+    .nav-links a:hover{color:#087be5}
+    .menu-toggle{border-color:var(--line);color:#174c91;background:#fff}
+    .hero-points{color:#42658f}
+    .hero-points span::before{color:#159fe9}
+    .hero-photo{border-color:rgba(255,255,255,.85)}
+    .photo-overlay{background:linear-gradient(180deg,rgba(7,53,119,.02) 30%,rgba(7,53,119,.64))}
+    .floating-card{border-color:rgba(255,255,255,.8);background:rgba(250,253,255,.95);color:#123c73}
+    .floating-card small{color:#58708f}
+    .float-icon{background:#e2f2ff}
+    .orb.one{background:rgba(54,130,255,.15)}
+    .orb.two{background:rgba(24,185,245,.13)}
+    .trust-strip{border-color:var(--line);background:rgba(224,239,255,.72)}
+    .trust-item{color:#244d7c;border-color:var(--line)}
+    .about-image{border-color:var(--line)}
+    .image-note{background:#d9edff;color:#17477f}
+    .about-copy p,.section-intro{color:var(--muted)}
+    .check-list li{color:#31577f}
+    .check-list li::before{color:#0875df;background:#e3f1ff}
+    .glass-card{background:linear-gradient(145deg,rgba(255,255,255,.99),rgba(235,245,255,.96));border-color:var(--line);box-shadow:0 10px 32px rgba(18,82,170,.055)}
+    .glass-card:hover{border-color:rgba(20,132,230,.5)}
+    .course-icon{background:#e3f1ff}
+    .course-body p,.benefit p,.step p,.price-desc{color:var(--muted)}
+    .benefit,.step,.faq-item{background:rgba(255,255,255,.76);border-color:var(--line)}
+    .step-number{background:linear-gradient(135deg,#075fe0,#22b8ed);color:#fff}
+    .price-card{background:rgba(255,255,255,.88);border-color:var(--line)}
+    .price-card.featured{border-color:rgba(20,132,230,.4);background:linear-gradient(150deg,rgba(218,239,255,.95),rgba(255,255,255,.97))}
+    .price-tag{color:#075fc5;background:#e4f1ff}
+    .price small,.fine-print{color:#6c83a0}
+    .location-top{background:radial-gradient(circle,rgba(113,181,255,.4),rgba(226,241,255,.3) 68%)}
+    .faq-question{color:var(--text)}
+    .faq-question span:last-child{color:#087be5}
+    .faq-answer{color:var(--muted)}
+    .cta-panel{border-color:rgba(20,132,230,.25);background:radial-gradient(circle at 90% 20%,rgba(120,202,255,.45),transparent 24rem),linear-gradient(125deg,#dceeff,#f7fbff 70%,#e7f3ff)}
+    .cta-panel p{color:#45668d}
+    .contact-info,.lead-form{border-color:var(--line);background:rgba(255,255,255,.84)}
+    .contact-line .symbol{background:#e4f1ff}
+    .contact-line small{color:var(--muted)}
+    .field label{color:#31577f}
+    .field input,.field select{border-color:rgba(25,91,190,.22);background:#fbfdff;color:#102b55}
+    .field input:focus,.field select:focus{border-color:#1688ef;box-shadow:0 0 0 3px rgba(22,136,239,.13)}
+    .field select option{background:#fff;color:#102b55}
+    .form-note,footer{color:#6c83a0}
+    .form-status{color:#0875df}
+    footer{border-top-color:var(--line)}
+    .footer-links a:hover{color:#0875df}
+    .back-top{border-color:var(--line);color:#174c91;background:rgba(255,255,255,.96)}
+    @media(max-width:720px){.nav-links{background:rgba(248,252,255,.99);border-bottom-color:var(--line)}}
 
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="#home" aria-label="KIBERone Semey — главная">
-        <span class="brand-mark">K</span>
-        <span>KIBERone<small>SEMEY · IT ДЛЯ ДЕТЕЙ</small></span>
-      </a>
-      <nav class="nav-links" id="navLinks" aria-label="Главное меню">
-        <a href="#about">О школе</a>
-        <a href="#courses">Направления</a>
-        <a href="#benefits">Преимущества</a>
-        <a href="#pricing">Стоимость</a>
-        <a href="#locations">Локации</a>
-        <a href="#contacts">Контакты</a>
-      </nav>
-      <a class="btn btn-primary" href="#contacts">Записаться бесплатно <span>↗</span></a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
-    </div>
-  </header>
+    /* Квиз подбора услуги */
+    .quiz-section{background:linear-gradient(180deg,rgba(224,240,255,.45),rgba(242,247,255,0))}
+    .quiz-shell{max-width:850px;margin:0 auto;padding:clamp(22px,4vw,38px);border:1px solid rgba(25,91,190,.18);border-radius:28px;background:rgba(255,255,255,.88);box-shadow:0 18px 55px rgba(18,82,170,.10)}
+    .quiz-progress{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:15px;color:#31577f;font-weight:800}
+    .quiz-progress-track{height:9px;overflow:hidden;border-radius:20px;background:#e4effb;margin-bottom:27px}
+    .quiz-progress-fill{height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,#075fe0,#22b8ed);transition:width .25s ease}
+    .quiz-question{font-size:clamp(1.25rem,3vw,1.8rem);margin:0 0 20px;color:#102b55}
+    .quiz-answers{display:grid;gap:12px}
+    .quiz-answer{width:100%;min-height:66px;padding:16px 19px;border-radius:16px;border:1.5px solid #d4e5f8;background:#f8fbff;color:#173e70;font-weight:800;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:background .18s,border-color .18s,transform .18s}
+    .quiz-answer:hover{background:#eaf5ff;border-color:#1688ef;transform:translateY(-1px)}
+    .quiz-answer span:last-child{color:#1386e8;font-size:1.25rem}
+    .quiz-result{display:none;padding:25px;border-radius:22px;background:linear-gradient(135deg,#e4f2ff,#f7fbff);border:1px solid #c7e2fb}
+    .quiz-result.show{display:block}
+    .quiz-result h3{font-size:clamp(1.45rem,3vw,2rem);color:#0754b5;margin-bottom:8px}
+    .quiz-result-price{font-size:1.35rem;font-weight:950;color:#0875df;margin:10px 0}
+    .quiz-result p{color:#49698f}
+    .quiz-result .btn{margin-top:7px}
+    .quiz-hidden{display:none!important}
+    @media(max-width:720px){.quiz-shell{padding:20px 16px;border-radius:22px}.quiz-answer{min-height:72px;padding:17px 16px;font-size:1rem}.quiz-progress{font-size:.93rem}}'''
+html = html[:css_start] + blue_css + html[css_end:]
 
-  <main>
-    <section class="hero" id="home">
-      <div class="orb one"></div><div class="orb two"></div>
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <div class="eyebrow">Международная IT-школа для детей</div>
-          <h1>Будущее <span class="gradient-text">начинается</span> с кода</h1>
-          <p class="lead">Помогаем детям открывать мир технологий, создавать игры, изучать программирование и превращать собственные идеи в цифровые проекты.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#contacts">Записаться на пробный урок <span>↗</span></a>
-            <a class="btn btn-secondary" href="#courses">Смотреть направления <span>↓</span></a>
+# Пункт меню квиза.
+if 'href="#quiz">Подбор</a>' not in html:
+    html = html.replace('<a href="#courses">Направления</a>',
+                        '<a href="#courses">Направления</a>\n        <a href="#quiz">Подбор</a>', 1)
+
+# Главная кнопка ведёт на квиз и имеет требуемую подпись.
+hero_candidates = [
+    '<a class="btn btn-primary" href="#contacts">Записаться на пробный урок <span>↗</span></a>',
+    '<a class="btn btn-primary" href="#courses">Посмотреть направления <span>↗</span></a>'
+]
+for old in hero_candidates:
+    if old in html:
+        html = html.replace(old, '<a class="btn btn-primary" href="#quiz">Подобрать услугу <span>↗</span></a>', 1)
+        break
+
+# Вставка квиза сразу после секции направлений/услуг.
+if 'id="quiz"' not in html:
+    insertion_points = ['    <section class="section" id="benefits">',
+                        '    <section class="section benefits" id="benefits">']
+    point = next((p for p in insertion_points if p in html), None)
+    if point is None:
+        raise ValueError("Не найдена секция после блока направлений для вставки квиза.")
+    quiz_html = r'''
+    <section class="section quiz-section" id="quiz">
+      <div class="container">
+        <div class="section-head reveal">
+          <div class="eyebrow">Подбор направления</div>
+          <h2>Подберём IT-направление <span class="gradient-text">для ребёнка</span></h2>
+          <p class="section-intro">Ответьте на 3 коротких вопроса — и узнайте, с чего можно начать знакомство с технологиями.</p>
+        </div>
+        <div class="quiz-shell reveal">
+          <div id="quizQuestions">
+            <div class="quiz-progress"><span id="quizCounter">Вопрос 1 из 3</span><span id="quizPercent">0%</span></div>
+            <div class="quiz-progress-track"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+            <h3 class="quiz-question" id="quizQuestion"></h3>
+            <div class="quiz-answers" id="quizAnswers"></div>
           </div>
-          <div class="hero-points">
-            <span>Пробный урок бесплатно</span>
-            <span>Занятия по выходным</span>
-            <span>Практика и проекты</span>
+          <div class="quiz-result" id="quizResult" aria-live="polite">
+            <div class="eyebrow">Ваш результат</div>
+            <h3 id="quizResultTitle">Вам подходит: ...</h3>
+            <div class="quiz-result-price" id="quizResultPrice"></div>
+            <p id="quizResultReason"></p>
+            <button class="btn btn-primary" type="button" id="quizRestart">Пройти заново ↻</button>
+            <a class="btn btn-secondary" href="#contacts">Оставить заявку</a>
           </div>
         </div>
-        <div class="hero-visual">
-          <img class="hero-photo" src="https://images.unsplash.com/photo-1588072432836-e10032774350?auto=format&fit=crop&w=1100&q=85" alt="Дети учатся и развивают новые навыки" fetchpriority="high">
-          <div class="photo-overlay"></div>
-          <div class="floating-card float-top"><span class="float-icon">💻</span><strong>Создавай, а не только играй</strong><small>Технологии через практику</small></div>
-          <div class="floating-card float-bottom"><strong>🚀 От идеи — к проекту</strong><small>Первый шаг в мир IT</small></div>
-        </div>
       </div>
     </section>
-
-    <div class="trust-strip">
-      <div class="container trust-grid">
-        <div class="trust-item"><span>🌍</span> Международная программа</div>
-        <div class="trust-item"><span>🧩</span> Развитие логики</div>
-        <div class="trust-item"><span>👩‍💻</span> Поддержка на занятиях</div>
-        <div class="trust-item"><span>🎮</span> Собственные проекты</div>
-      </div>
-    </div>
-
-    <section class="section" id="about">
-      <div class="container about-grid">
-        <div class="about-image-wrap reveal">
-          <img class="about-image" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=85" alt="Учебный процесс в классе" loading="lazy">
-          <div class="image-note">Любопытство сегодня — навыки будущего ✨</div>
-        </div>
-        <div class="about-copy reveal">
-          <div class="eyebrow">О школе KIBERone</div>
-          <h2>Не просто компьютер. <span class="gradient-text">Целый мир возможностей.</span></h2>
-          <p>KIBERone — международная школа цифрового развития детей. Здесь ребята знакомятся с программированием, современными технологиями и цифровым творчеством, учатся мыслить логически и воплощать идеи в жизнь.</p>
-          <ul class="check-list">
-            <li>Практические задания и творческие проекты</li>
-            <li>Обучение в небольших возрастных группах</li>
-            <li>Преподаватель и тьютор помогают на занятиях</li>
-            <li>Навыки, которые развиваются шаг за шагом</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="courses">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Направления обучения</div>
-          <h2>Что ребёнок сможет <span class="gradient-text">создавать?</span></h2>
-          <p class="section-intro">Знакомство с технологиями через интересные задачи, эксперименты и собственные проекты. Наполнение программы зависит от возраста и уровня ученика.</p>
-        </div>
-        <div class="cards-grid">
-          <article class="glass-card reveal">
-            <img class="course-image" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Ретро-игры и цифровой мир" loading="lazy">
-            <div class="course-body"><div class="course-icon">🎮</div><h3>Программирование и игры</h3><p>Знакомство с логикой программирования и создание собственных мини-игр.</p></div>
-          </article>
-          <article class="glass-card reveal">
-            <img class="course-image" src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=800&q=80" alt="Компьютерная игра на экране" loading="lazy">
-            <div class="course-body"><div class="course-icon">🧱</div><h3>Minecraft и цифровые миры</h3><p>Игровые механики, логика и знакомство с созданием интерактивных миров.</p></div>
-          </article>
-          <article class="glass-card reveal">
-            <img class="course-image" src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80" alt="Визуализация искусственного интеллекта" loading="lazy">
-            <div class="course-body"><div class="course-icon">🤖</div><h3>Искусственный интеллект</h3><p>Знакомство с ИИ-инструментами и создание идей, персонажей и цифрового контента.</p></div>
-          </article>
-          <article class="glass-card reveal">
-            <img class="course-image" src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80" alt="Работа над дизайном сайта" loading="lazy">
-            <div class="course-body"><div class="course-icon">🌐</div><h3>Сайты и приложения</h3><p>Основы создания сайтов и знакомство с тем, как устроены цифровые продукты.</p></div>
-          </article>
-          <article class="glass-card reveal">
-            <img class="course-image" src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=800&q=80" alt="Трёхмерная цифровая модель" loading="lazy">
-            <div class="course-body"><div class="course-icon">🧊</div><h3>3D, VR и AR</h3><p>Создание объёмных моделей и знакомство с виртуальной и дополненной реальностью.</p></div>
-          </article>
-          <article class="glass-card reveal">
-            <img class="course-image" src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80" alt="Программный код на экране" loading="lazy">
-            <div class="course-body"><div class="course-icon">🐍</div><h3>Python и новые технологии</h3><p>Для подходящего уровня подготовки — основы Python и более сложные проекты.</p></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="benefits">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Почему KIBERone</div>
-          <h2>Знания, которые можно <span class="gradient-text">применить на практике</span></h2>
-        </div>
-        <div class="benefit-grid">
-          <article class="benefit reveal"><div class="symbol">🛠️</div><h3>Практика вместо скучных лекций</h3><p>Дети закрепляют знания через задания и создание проектов.</p></article>
-          <article class="benefit reveal"><div class="symbol">👥</div><h3>Небольшие группы</h3><p>В группе — до 10 учеников, чтобы уделять внимание каждому.</p></article>
-          <article class="benefit reveal"><div class="symbol">🧑‍🏫</div><h3>Поддержка на занятиях</h3><p>Преподаватель и тьютор помогают разбираться в новых темах.</p></article>
-          <article class="benefit reveal"><div class="symbol">💻</div><h3>Техника для обучения</h3><p>Компьютеры и учебные материалы предоставляет школа.</p></article>
-          <article class="benefit reveal"><div class="symbol">🧠</div><h3>Развитие мышления</h3><p>Логика, самостоятельность и навык решения задач.</p></article>
-          <article class="benefit reveal"><div class="symbol">🚀</div><h3>Результат, которым можно поделиться</h3><p>Ребёнок учится показывать и объяснять свои цифровые проекты.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Первый шаг в IT</div>
-          <h2>Начать проще, чем кажется</h2>
-          <p class="section-intro">Познакомьтесь со школой и подберите подходящую группу без спешки.</p>
-        </div>
-        <div class="steps">
-          <article class="step reveal"><div class="step-number">01</div><h3>Оставьте заявку</h3><p>Укажите возраст ребёнка и удобную локацию.</p></article>
-          <article class="step reveal"><div class="step-number">02</div><h3>Попробуйте бесплатно</h3><p>Познакомьтесь с преподавателем и форматом урока.</p></article>
-          <article class="step reveal"><div class="step-number">03</div><h3>Подберём группу</h3><p>Учитываем возраст и уровень подготовки ребёнка.</p></article>
-          <article class="step reveal"><div class="step-number">04</div><h3>Создавайте проекты</h3><p>Осваивайте новые технологии шаг за шагом.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="pricing">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Стоимость обучения</div>
-          <h2>Начните знакомство с IT <span class="gradient-text">бесплатно</span></h2>
-          <p class="section-intro">Приходите на пробное занятие, чтобы ребёнок мог попробовать себя в мире технологий.</p>
-        </div>
-        <div class="pricing-grid">
-          <article class="price-card reveal">
-            <div class="price-tag">ПЕРВОЕ ЗНАКОМСТВО</div>
-            <h3>Пробный урок</h3>
-            <div class="price">0 ₸ <small>/ бесплатно</small></div>
-            <p class="price-desc">Один час знакомства со школой и форматом занятий.</p>
-            <ul class="check-list"><li>Продолжительность — 1 час</li><li>Знакомство с преподавателем</li><li>Попробовать себя в IT</li></ul>
-            <a class="btn btn-secondary" href="#contacts">Записаться бесплатно</a>
-          </article>
-          <article class="price-card featured reveal">
-            <div class="price-tag">РЕГУЛЯРНЫЕ ЗАНЯТИЯ</div>
-            <h3>Абонемент на месяц</h3>
-            <div class="price">30 000 ₸ <small>/ месяц</small></div>
-            <p class="price-desc">Обучение в группе по выходным.</p>
-            <ul class="check-list"><li>Один раз в неделю</li><li>Занятие длится 2 часа</li><li>Обычно 4–5 занятий в месяц</li><li>Компьютеры и учебные материалы включены</li></ul>
-            <a class="btn btn-primary" href="#contacts">Уточнить расписание</a>
-          </article>
-        </div>
-        <p class="fine-print">После пробного урока при записи на обучение может действовать скидка 10% — 27 000 ₸ в месяц до конца учебного года. Условия и актуальность предложения уточняйте у менеджера.</p>
-      </div>
-    </section>
-
-    <section class="section" id="locations">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">KIBERone в Семее</div>
-          <h2>Выберите удобную <span class="gradient-text">локацию</span></h2>
-          <p class="section-intro">Уточните у менеджера актуальное расписание и наличие мест в подходящей группе.</p>
-        </div>
-        <div class="locations-grid">
-          <article class="glass-card location-card reveal">
-            <div class="location-top">🏛️</div><h3>Дворец творчества и молодёжи</h3><p>г. Семей, ул. Абая, 73</p>
-            <a class="btn btn-secondary" href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer">Посмотреть локацию ↗</a>
-          </article>
-          <article class="glass-card location-card reveal">
-            <div class="location-top">⚡</div><h3>ЭТК</h3><p>г. Семей, ул. Морозова, 141</p>
-            <a class="btn btn-secondary" href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer">Посмотреть локацию ↗</a>
-          </article>
-          <article class="glass-card location-card reveal">
-            <div class="location-top">📍</div><h3>Жастар</h3><p>г. Семей, ул. Затаевича, 31А</p>
-            <a class="btn btn-secondary" href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer">Посмотреть локацию ↗</a>
-          </article>
-        </div>
-        <p style="margin-top:22px"><a class="btn btn-primary" href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer">Посмотреть официальный сайт ↗</a></p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Мир идей и технологий</div>
-          <h2>Так рождаются <span class="gradient-text">IT-идеи</span></h2>
-          <p class="section-intro">Учимся, экспериментируем и превращаем любопытство в новые навыки.</p>
-        </div>
-        <div class="gallery-grid reveal">
-          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=85" alt="Работа за ноутбуком" loading="lazy">
-          <img src="https://images.unsplash.com/photo-1584697964358-3e14ca57658b?auto=format&fit=crop&w=700&q=85" alt="Обучение и творчество" loading="lazy">
-          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=700&q=85" alt="Командная работа над проектом" loading="lazy">
-          <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1000&q=85" alt="Совместная работа с технологиями" loading="lazy">
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="faq">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">FAQ</div>
-          <h2>Часто задаваемые <span class="gradient-text">вопросы</span></h2>
-        </div>
-        <div class="faq-list">
-          <div class="faq-item reveal"><button class="faq-question" aria-expanded="false"><span>С какого возраста можно заниматься?</span><span>＋</span></button><div class="faq-answer">Программа рассчитана преимущественно на детей от 6 до 14 лет. Подходящую группу можно уточнить у менеджера.</div></div>
-          <div class="faq-item reveal"><button class="faq-question" aria-expanded="false"><span>Нужно ли ребёнку уметь программировать?</span><span>＋</span></button><div class="faq-answer">Нет, можно начать с основ. Программа подбирается с учётом возраста и уровня подготовки.</div></div>
-          <div class="faq-item reveal"><button class="faq-question" aria-expanded="false"><span>Сколько длится занятие?</span><span>＋</span></button><div class="faq-answer">Обычно регулярное занятие длится 2 часа и проходит один раз в неделю. Пробный урок длится 1 час.</div></div>
-          <div class="faq-item reveal"><button class="faq-question" aria-expanded="false"><span>Нужно ли приносить свой ноутбук?</span><span>＋</span></button><div class="faq-answer">Нет, компьютеры для занятий предоставляет школа.</div></div>
-          <div class="faq-item reveal"><button class="faq-question" aria-expanded="false"><span>Где проходят занятия?</span><span>＋</span></button><div class="faq-answer">В Семее занятия проходят на локациях Дворец творчества и молодёжи, ЭТК и Жастар. Актуальное расписание зависит от группы.</div></div>
-          <div class="faq-item reveal"><button class="faq-question" aria-expanded="false"><span>Можно ли сначала попробовать бесплатно?</span><span>＋</span></button><div class="faq-answer">Да! Оставьте заявку, и менеджер поможет уточнить доступные время и локацию для пробного урока.</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="cta-panel reveal">
-          <div class="eyebrow">Первый шаг может изменить многое</div>
-          <h2>Возможно, здесь начнётся <span class="gradient-text">его большое будущее</span></h2>
-          <p>Подарите ребёнку возможность познакомиться с программированием, попробовать современные технологии и создать свой первый проект.</p>
-          <a class="btn btn-primary" href="#contacts">Записаться на бесплатный урок ↗</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="contacts">
-      <div class="container">
-        <div class="section-head reveal">
-          <div class="eyebrow">Контакты</div>
-          <h2>Давайте <span class="gradient-text">знакомиться!</span></h2>
-          <p class="section-intro">Оставьте данные — подготовим заявку, чтобы вы могли связаться с менеджером и уточнить удобное время.</p>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-info reveal">
-            <a class="brand" href="#home"><span class="brand-mark">K</span><span>KIBERone<small>SEMEY · IT ДЛЯ ДЕТЕЙ</small></span></a>
-            <div class="contact-line"><span class="symbol">📍</span><div><small>Город</small><strong>Семей, Казахстан</strong></div></div>
-            <div class="contact-line"><span class="symbol">🌐</span><div><small>Официальный сайт</small><strong><a href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer">semey.ru.kiber-one.kz ↗</a></strong></div></div>
-            <div class="contact-line"><span class="symbol">🎁</span><div><small>Первое занятие</small><strong>Бесплатный пробный урок</strong></div></div>
-            <p class="fine-print">Телефон и ссылки на социальные сети не указаны, чтобы не публиковать непроверенные контакты.</p>
-          </div>
-          <form class="lead-form reveal" id="leadForm">
-            <h3>Заявка на пробный урок</h3>
-            <p class="price-desc">Заполните форму — она подготовит текст заявки, который можно скопировать и отправить менеджеру.</p>
-            <div class="form-grid">
-              <div class="field"><label for="parentName">Имя родителя *</label><input id="parentName" name="parentName" autocomplete="name" required placeholder="Ваше имя"></div>
-              <div class="field"><label for="childName">Имя ребёнка</label><input id="childName" name="childName" placeholder="Имя ребёнка"></div>
-              <div class="field"><label for="age">Возраст ребёнка *</label><select id="age" name="age" required><option value="">Выберите возраст</option><option>6 лет</option><option>7 лет</option><option>8 лет</option><option>9 лет</option><option>10 лет</option><option>11 лет</option><option>12 лет</option><option>13 лет</option><option>14 лет</option><option>Другой возраст</option></select></div>
-              <div class="field"><label for="phone">Номер телефона *</label><input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="+7 ___ ___ __ __"></div>
-              <div class="field full"><label for="location">Удобная локация</label><select id="location" name="location"><option>Пока не выбрали</option><option>Дворец творчества и молодёжи</option><option>ЭТК</option><option>Жастар</option></select></div>
-            </div>
-            <p class="form-note">Форма не отправляет данные автоматически. После заполнения можно скопировать подготовленный текст и отправить его менеджеру через удобный канал.</p>
-            <button class="btn btn-primary" type="submit">Подготовить заявку ↗</button>
-            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-            <textarea id="requestText" hidden aria-label="Подготовленный текст заявки"></textarea>
-            <button class="btn btn-secondary" type="button" id="copyRequest" hidden style="margin-top:10px">Скопировать заявку</button>
-            <a class="btn btn-secondary" id="officialLink" href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer" style="margin-top:10px">Открыть официальный сайт</a>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-inner">
-      <a class="brand" href="#home"><span class="brand-mark">K</span><span>KIBERone<small>SEMEY</small></span></a>
-      <div>© <span id="year"></span> KIBERone Semey · Мир IT начинается здесь</div>
-      <div class="footer-links"><a href="#about">О школе</a><a href="#courses">Направления</a><a href="#contacts">Контакты</a><a href="https://semey.ru.kiber-one.kz/" target="_blank" rel="noopener noreferrer">Официальный сайт ↗</a></div>
-    </div>
-  </footer>
-  <button class="back-top" id="backTop" aria-label="Наверх">↑</button>
-
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.getElementById('navLinks');
-    menuToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      menuToggle.setAttribute('aria-expanded', String(isOpen));
-      menuToggle.textContent = isOpen ? '×' : '☰';
-    });
-    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      menuToggle.setAttribute('aria-expanded', 'false');
-      menuToggle.textContent = '☰';
-    }));
-
-    document.querySelectorAll('.faq-question').forEach(button => {
-      button.addEventListener('click', () => {
-        const item = button.closest('.faq-item');
-        const isOpen = item.classList.toggle('open');
-        button.setAttribute('aria-expanded', String(isOpen));
-      });
-    });
-
-    const backTop = document.getElementById('backTop');
-    window.addEventListener('scroll', () => {
-      backTop.classList.toggle('visible', window.scrollY > 550);
-    }, { passive: true });
-    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const revealItems = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window && !reduceMotion) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      revealItems.forEach(item => observer.observe(item));
-    } else {
-      revealItems.forEach(item => item.classList.add('visible'));
-    }
-
-    const form = document.getElementById('leadForm');
-    const status = document.getElementById('formStatus');
-    const copyButton = document.getElementById('copyRequest');
-    const requestText = document.getElementById('requestText');
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      if (!form.reportValidity()) return;
-      const data = new FormData(form);
-      const message = [
-        'Здравствуйте! Хочу записать ребёнка на бесплатный пробный урок KIBERone Semey.',
-        'Имя родителя: ' + data.get('parentName'),
-        'Имя ребёнка: ' + (data.get('childName') || 'не указано'),
-        'Возраст: ' + data.get('age'),
-        'Телефон: ' + data.get('phone'),
-        'Удобная локация: ' + data.get('location')
-      ].join('\n');
-      requestText.value = message;
-      requestText.hidden = false;
-      copyButton.hidden = false;
-      status.textContent = 'Заявка подготовлена. Нажмите «Скопировать заявку» и отправьте её менеджеру.';
-    });
-    copyButton.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(requestText.value);
-        status.textContent = 'Заявка скопирована. Теперь можно отправить её менеджеру.';
-      } catch (error) {
-        requestText.hidden = false;
-        requestText.focus();
-        requestText.select();
-        status.textContent = 'Автокопирование недоступно. Выделите текст заявки и скопируйте его вручную.';
-      }
-    });
-  </script>
-</body>
-</html>
 '''
-path = Path("/mnt/data/index.html")
-path.write_text(html, encoding="utf-8")
-print(f"Created {path} ({path.stat().st_size} bytes)")
+    html = html.replace(point, quiz_html + '\n' + point, 1)
+
+# Скрипт квиза; итог при равенстве голосов — программирование и создание игр.
+quiz_script = r'''
+    // Квиз подбора направления — работает без сервера и библиотек.
+    (() => {
+      const services = {
+        games: {title:'Программирование и создание игр', price:'от 30 000 ₸', reason:'Подойдёт ребёнку, которому интересно придумывать игровые правила, персонажей и собственные игры. Через игровые проекты он сможет постепенно освоить логику и основы программирования.'},
+        minecraft: {title:'Minecraft и цифровые миры', price:'от 30 000 ₸', reason:'Хороший выбор для тех, кто любит Minecraft и хочет не только играть, но и создавать собственные миры, механики и интерактивные проекты.'},
+        ai: {title:'Искусственный интеллект', price:'от 30 000 ₸', reason:'Подойдёт любознательным детям, которым интересно, как работают современные AI-инструменты и как с их помощью создавать персонажей, изображения и цифровые идеи.'},
+        web: {title:'Создание сайтов и приложений', price:'от 30 000 ₸', reason:'Подойдёт тем, кто хочет создавать полезные цифровые продукты, оформлять страницы и узнавать, как устроены сайты и приложения.'},
+        3d: {title:'3D, VR и AR', price:'от 30 000 ₸', reason:'Подойдёт детям с интересом к визуальному творчеству, объёмным моделям и интерактивным виртуальным мирам.'},
+        python: {title:'Python и новые технологии', price:'от 30 000 ₸', reason:'Подойдёт тем, кто готов постепенно переходить к текстовому программированию, решать логические задачи и создавать более сложные проекты.'}
+      };
+      const questions = [
+        {q:'Что ребёнку интереснее всего?',a:[
+          ['Создавать игры и придумывать правила','games'],
+          ['Исследовать Minecraft и строить миры','minecraft'],
+          ['Пробовать нейросети и AI-инструменты','ai']
+        ]},
+        {q:'Какой проект ему хотелось бы создать?',a:[
+          ['Свой сайт или полезное приложение','web'],
+          ['3D-модель или виртуальный мир','3d'],
+          ['Собственную программу на Python','python']
+        ]},
+        {q:'Что больше всего увлекает ребёнка?',a:[
+          ['Игры, эксперименты и интерактивные задания','games'],
+          ['Новые технологии и искусственный интеллект','ai'],
+          ['Создание цифровых объектов и миров','3d']
+        ]}
+      ];
+      const root = document.getElementById('quiz');
+      if (!root) return;
+      const questionsBox = root.querySelector('#quizQuestions');
+      const questionTitle = root.querySelector('#quizQuestion');
+      const answersBox = root.querySelector('#quizAnswers');
+      const counter = root.querySelector('#quizCounter');
+      const percent = root.querySelector('#quizPercent');
+      const progress = root.querySelector('#quizProgressFill');
+      const result = root.querySelector('#quizResult');
+      let step = 0, votes = [];
+
+      function render() {
+        const item = questions[step];
+        const value = Math.round(step / questions.length * 100);
+        counter.textContent = `Вопрос ${step + 1} из ${questions.length}`;
+        percent.textContent = `${value}%`;
+        progress.style.width = `${value}%`;
+        questionTitle.textContent = item.q;
+        answersBox.replaceChildren();
+        item.a.forEach(([label, service]) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'quiz-answer';
+          const text = document.createElement('span');
+          text.textContent = label;
+          const arrow = document.createElement('span');
+          arrow.textContent = '→';
+          button.append(text, arrow);
+          button.addEventListener('click', () => {
+            votes.push(service);
+            step++;
+            if (step < questions.length) render();
+            else finish();
+          });
+          answersBox.append(button);
+        });
+      }
+      function finish() {
+        const counts = {};
+        votes.forEach(key => counts[key] = (counts[key] || 0) + 1);
+        const max = Math.max(...Object.values(counts));
+        const winners = Object.keys(counts).filter(key => counts[key] === max);
+        const chosen = winners.length === 1 ? winners[0] : 'games';
+        const service = services[chosen];
+        questionsBox.classList.add('quiz-hidden');
+        result.classList.add('show');
+        progress.style.width = '100%';
+        percent.textContent = '100%';
+        root.querySelector('#quizResultTitle').textContent = `Вам подходит: ${service.title}`;
+        root.querySelector('#quizResultPrice').textContent = service.price;
+        root.querySelector('#quizResultReason').textContent = service.reason;
+      }
+      root.querySelector('#quizRestart').addEventListener('click', () => {
+        step = 0; votes = [];
+        result.classList.remove('show');
+        questionsBox.classList.remove('quiz-hidden');
+        render();
+      });
+      render();
+    })();
+
+'''
+if 'Квиз подбора направления — работает без сервера' not in html:
+    script_anchor = "    const form = document.getElementById('leadForm');"
+    if script_anchor not in html:
+        script_anchor = '</script>'
+        pos = html.rfind(script_anchor)
+        if pos == -1:
+            raise ValueError("Не найден конец JavaScript для добавления квиза.")
+        html = html[:pos] + quiz_script + html[pos:]
+    else:
+        html = html.replace(script_anchor, quiz_script + script_anchor, 1)
+
+output = Path("/mnt/data/KIBERone_Semey_blue_quiz.html")
+output.write_text(html, encoding="utf-8")
+print(f"Готово: {output.name} ({output.stat().st_size:,} байт)")
